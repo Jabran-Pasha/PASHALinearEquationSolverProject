@@ -1,3 +1,4 @@
+import javax.sound.sampled.Line;
 import java.util.Scanner;
 public class LinearEquationRunner {
     public static void main(String[] args) {
@@ -23,7 +24,10 @@ public class LinearEquationRunner {
         int x2 = Integer.parseInt(coord2.substring(coord2.indexOf("(") + 1, (coord2.indexOf(","))));
         int y2 = Integer.parseInt(coord2.substring(coord2.indexOf(",")+ 2, (coord2.indexOf(")"))));
 
+        //Creating object
+        LinearEquation linearEquation = new LinearEquation(x1, y1, x2, y2);
 
+        //Outputs
 
 
 
