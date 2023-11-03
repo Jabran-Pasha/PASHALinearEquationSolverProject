@@ -18,10 +18,21 @@ public class LinearEquation {
 
     }
 
+    /* "Helper" method for use elsewhere in your methods; returns the value toRound rounded
+    to the nearest hundredth
+
+    HINT:  the Math.round method can help with this!
+ */
+    public double roundedToHundredth(double toRound){
+        double round = (toRound*100) % 100;
+        return round;
+    }
+
+
     /* Calculates and returns distance between (x1, y1) and (x2, y2), rounded to
 the nearest hundredth */
     public double distance(){
-        double distance = Math.sqrt((Math.pow(x2 - x1, 2)) + (Math.pow(y2 - y1, 2)));
+        double distance = roundedToHundredth(Math.sqrt((Math.pow(x2 - x1, 2)) + (Math.pow(y2 - y1, 2))));
         return distance;
     }
 
@@ -76,16 +87,6 @@ the nearest hundredth */
        both x and y coordinates as decimals to the nearest hundredth, e.g (-5.0, 6.75) */
     public String coordinateForX(double xValue)
 
-
-
-
-
-    /* "Helper" method for use elsewhere in your methods; returns the value toRound rounded
-        to the nearest hundredth
-
-        HINT:  the Math.round method can help with this!
-     */
-    public double roundedToHundredth(double toRound)
 
 
 
