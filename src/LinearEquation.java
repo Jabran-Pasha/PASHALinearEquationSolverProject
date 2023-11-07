@@ -17,7 +17,21 @@ public class LinearEquation {
         this.y2 = y2;
 
     }
-
+    public String formatSlope(double slope) {
+        if (slope == (int) slope) {
+            return Integer.toString((int) slope);
+        } else {
+            return String.format("%.2f", slope);
+        }
+    }
+    private String formatIntercept(double intercept) {
+        // Check if the intercept is an integer
+        if (intercept == (int) intercept) {
+            return "+ " + Integer.toString((int) intercept);
+        } else {
+            return intercept > 0 ? "+ " + String.format("%.2f", intercept) : "- " + String.format("%.2f", Math.abs(intercept));
+        }
+    }
     /* "Helper" method for use elsewhere in your methods; returns the value toRound rounded
     to the nearest hundredth
 
@@ -28,12 +42,37 @@ public class LinearEquation {
         return round;
     }
 
+    // Helper method to format the slope as a fraction
+    private String fractionString(double value) {
+        if (value == (int) value) {
+            return Integer.toString((int) value);
+        }
+
+        int numerator = (int) Math.round(value * 100);
+        int denominator = 100;
+
+        int gcd = gcd(numerator, denominator);
+        numerator /= gcd;
+        denominator /= gcd;
+
+        return String.format("%d/%d", numerator, denominator);
+    }
+
+    // Helper method to calculate the greatest common divisor (GCD) of two numbers
+    private int gcd(int a, int b) {
+        while (b != 0) {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return Math.abs(a);
+    }
 
     /* Calculates and returns distance between (x1, y1) and (x2, y2), rounded to
 the nearest hundredth */
-    public double distance(){
-        double distance = roundedToHundredth(Math.sqrt((Math.pow(x2 - x1, 2)) + (Math.pow(y2 - y1, 2))));
-        return distance;
+    public double distance() {
+        double distance = Math.sqrt((Math.pow(x2 - x1, 2)) + (Math.pow(y2 - y1, 2)));
+        return Math.round(distance * 10.0) / 10.0; // Round to one decimal place
     }
 
     /* Calculates and returns the slope of the line between (x1, y1) and
@@ -78,15 +117,50 @@ the nearest hundredth */
         HINT: Absolute value might be helpful for printing negative y-intercepts as
                subtraction!
      */
-    public String equation()
+
+    public String equation() {
+        double m = slope();
+        double b = yIntercept();
+
+        if (Double.isInfinite(m)) {
+            // Vertical line
+            return "x = " + String.format("%.2f", x1);
+        } else {
+            // Use a custom method to convert the slope to a fraction
+            String mString = fractionString(m);
+
+            // Handle the y-intercept (b) formatting
+            String bString;
+            if (b == (int) b) {
+                // If b is an integer, don't display the fraction
+                if (b >= 0) {
+                    bString = "+ " + Integer.toString((int) b);
+                } else {
+                    bString = "- " + Integer.toString(Math.abs((int) b));
+                }
+            } else {
+                if (b >= 0) {
+                    bString = "+ " + String.format("%.2f", b);
+                } else {
+                    bString = "- " + String.format("%.2f", Math.abs(b));
+                }
+            }
+
+            return "y = " + mString + "x " + bString;
+        }
+    }
+
+
 
 
 
 
     /* Returns a String of the coordinate point on the line that has the given x value, with
        both x and y coordinates as decimals to the nearest hundredth, e.g (-5.0, 6.75) */
-    public String coordinateForX(double xValue)
-
+    public String coordinateForX(double xValue) {
+        double yValue = slope() * xValue + yIntercept();
+        return String.format("(%.2f, %.2f)", xValue, roundedToHundredth(yValue));
+    }
 
 
 
@@ -102,7 +176,15 @@ the nearest hundredth */
       equation(), slope(), yIntercept(), distance().
 
       */
-    public String lineInfo()
+    public String lineInfo() {
+        String info = "Equation: " + equation() + "\n";
+        info += "Slope: " + formatSlope(slope()) + "\n";
+        info += "Y-Intercept: " + formatIntercept(yIntercept()) + "\n";
+        info += "Distance: " + String.format("%.1f", distance()) + "\n"; // Format distance to one decimal place
+        return info;
+    }
+
+
 
 
 }
