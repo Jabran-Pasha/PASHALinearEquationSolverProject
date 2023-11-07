@@ -147,12 +147,17 @@ the nearest hundredth */
 
             String bString = "";
             if (b != 0) {
-                bString = (b < 0 ? "- " : "+ ") + formatIntercept(Math.abs(b));
+                if (b < 0) {
+                    bString = "- " + formatIntercept(Math.abs(b));
+                } else {
+                    bString = "+ " + formatIntercept(b);
+                }
             }
 
             return "y = " + mString + " " + bString;
         }
     }
+
 
 
 
