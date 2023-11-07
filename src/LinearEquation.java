@@ -25,22 +25,32 @@ public class LinearEquation {
         }
     }
     private String formatIntercept(double intercept) {
-        // Check if the intercept is an integer
         if (intercept == (int) intercept) {
-            return "+ " + Integer.toString((int) intercept);
+            if (intercept != 0) {
+                return Integer.toString((int) intercept);
+            } else {
+                return "0";
+            }
+        } else if (intercept > 0) {
+            return "+ " + String.format("%.2f", intercept);
+        } else if (intercept < 0) {
+            return "- " + String.format("%.2f", Math.abs(intercept));
         } else {
-            return intercept > 0 ? "+ " + String.format("%.2f", intercept) : "- " + String.format("%.2f", Math.abs(intercept));
+            return "0"; // Display "0" for y-intercepts of 0
         }
     }
+
+
+
     /* "Helper" method for use elsewhere in your methods; returns the value toRound rounded
     to the nearest hundredth
 
     HINT:  the Math.round method can help with this!
  */
-    public double roundedToHundredth(double toRound){
-        double round = (toRound*100) % 100;
-        return round;
+    public double roundedToHundredth(double toRound) {
+        return Math.round(toRound * 100.0) / 100.0;
     }
+
 
     // Helper method to format the slope as a fraction
     private String fractionString(double value) {
@@ -72,7 +82,7 @@ public class LinearEquation {
 the nearest hundredth */
     public double distance() {
         double distance = Math.sqrt((Math.pow(x2 - x1, 2)) + (Math.pow(y2 - y1, 2)));
-        return Math.round(distance * 10.0) / 10.0; // Round to one decimal place
+        return roundedToHundredth(distance);
     }
 
     /* Calculates and returns the slope of the line between (x1, y1) and
@@ -126,29 +136,25 @@ the nearest hundredth */
             // Vertical line
             return "x = " + String.format("%.2f", x1);
         } else {
-            // Use a custom method to convert the slope to a fraction
-            String mString = fractionString(m);
-
-            // Handle the y-intercept (b) formatting
-            String bString;
-            if (b == (int) b) {
-                // If b is an integer, don't display the fraction
-                if (b >= 0) {
-                    bString = "+ " + Integer.toString((int) b);
-                } else {
-                    bString = "- " + Integer.toString(Math.abs((int) b));
-                }
-            } else {
-                if (b >= 0) {
-                    bString = "+ " + String.format("%.2f", b);
-                } else {
-                    bString = "- " + String.format("%.2f", Math.abs(b));
-                }
+            String mString = "";
+            if (m == 1) {
+                mString = "x";
+            } else if (m == -1) {
+                mString = "-x";
+            } else if (m != 0) {
+                mString = fractionString(m) + "x";
             }
 
-            return "y = " + mString + "x " + bString;
+            String bString = "";
+            if (b != 0) {
+                bString = (b < 0 ? "- " : "+ ") + formatIntercept(Math.abs(b));
+            }
+
+            return "y = " + mString + " " + bString;
         }
     }
+
+
 
 
 
@@ -180,7 +186,7 @@ the nearest hundredth */
         String info = "Equation: " + equation() + "\n";
         info += "Slope: " + formatSlope(slope()) + "\n";
         info += "Y-Intercept: " + formatIntercept(yIntercept()) + "\n";
-        info += "Distance: " + String.format("%.1f", distance()) + "\n"; // Format distance to one decimal place
+        info += "Distance: " + distance();
         return info;
     }
 

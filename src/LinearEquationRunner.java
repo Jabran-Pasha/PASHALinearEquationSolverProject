@@ -31,6 +31,3 @@ public class LinearEquationRunner {
         System.out.println("Line Information:\n" + linearEquation.lineInfo());
     }
 }
-
-
-
